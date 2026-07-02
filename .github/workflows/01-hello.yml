@@ -1,19 +1,27 @@
 name: 01 - Hello
 
 on:
-    push:
-        branches: [main]
+  push:
+    branches: [main]
 
 jobs:
-    hello:
-        runs-on: ubuntu-24.04
-        steps:
-            - name: Saludar
-              run: echo "Hello, world from GitHub Actions!"
+  hello:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Saludar
+        run: echo "Hello, world from GitHub Actions!"
 
-            - name: Ver fecha del runner
-              run: date
+      - name: Ver fecha del runner
+        run: date
 
-            - name: Ver archivos disponibles
-              run: ls -la
-            
+      - name: Ver archivos disponibles
+        run: ls -la
+
+  repo-files:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: descargar codigo del repositorio
+        uses: actions/checkout@v6
+
+      - name: ver archivos dentro del repo
+        run: ls -la

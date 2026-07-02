@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de CI/CD de midudev - por Juan Jesús Martín Melero</title>
+    <meta name="description" content="Proyecto del curso de Integración y Despliegue Continuo (CI/CD) de midudev, realizado por Juan Jesús Martín Melero.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --primary-accent: #38bdf8;
+            --secondary-accent: #818cf8;
+            --glow-color: rgba(56, 189, 248, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background grid effect */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.08) 0, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.08) 0, transparent 45%);
+            z-index: -1;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                        0 0 50px var(--glow-color);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        box-shadow 0.4s ease,
+                        border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 
+                        0 0 60px rgba(56, 189, 248, 0.25);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg, 
+                transparent 45%, 
+                rgba(255, 255, 255, 0.03) 50%, 
+                transparent 55%
+            );
+            transform: rotate(45deg);
+            transition: transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .card:hover::after {
+            transform: translate(50%, 50%) rotate(45deg);
+        }
+
+        .badge {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--primary-accent);
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .author-box {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .author-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: #ffffff;
+        }
+
+        .action-button {
+            display: inline-block;
+            text-decoration: none;
+            background: transparent;
+            border: 2px solid var(--primary-accent);
+            color: var(--primary-accent);
+            padding: 12px 28px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            background: var(--primary-accent);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+            transform: scale(1.03);
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: rgba(148, 163, 184, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <main class="card">
+            <span class="badge" id="badge-ci-cd">CI/CD Pipeline</span>
+            <h1>Curso de midudev</h1>
+            <h2>Integración y Despliegue Continuo</h2>
+            
+            <p>
+                Este repositorio contiene las prácticas, laboratorios y proyectos de automatización desarrollados a lo largo del curso.
+            </p>
+
+            <div class="author-box">
+                <span class="author-label">Estudiante / Realizado por</span>
+                <span class="author-name">Juan Jesús Martín Melero</span>
+            </div>
+
+            <a href="https://github.com/jjmartinmelero/CI-CD" target="_blank" rel="noopener noreferrer" class="action-button" id="repo-link">
+                Ver Repositorio
+            </a>
+        </main>
+
+        <footer class="footer">
+            <span class="dot"></span>
+            <span>GitHub Actions Activo</span>
+        </footer>
+    </div>
+
+</body>
+</html>
