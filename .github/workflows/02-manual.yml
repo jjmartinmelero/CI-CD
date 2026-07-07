@@ -1,0 +1,17 @@
+name: 02-manual
+
+on:
+  workflow_dispatch:
+
+jobs:
+  manual:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: "Say hello manually"
+        run: echo "Hello, world! from a manual trigger"
+
+      - name: "show runner date"
+        run: date
+
+      - name: "show available files"
+        run: ls -la
