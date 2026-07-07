@@ -2,16 +2,57 @@ name: 02-manual
 
 on:
   workflow_dispatch:
+    inputs:
+      log_level:
+        description: nivel de detalle de los logs
+        required: true
+        default: "info"
+        type: choice
+        options:
+          - info
+          - debug
+          - warning
+          - error
+
+      environment:
+        description: "Environment for manual workflows"
+        type: environment
+
+      dry_run:
+        description: "Ejecutar sin aplicar los cambios"
+        type: boolean
+        required: false
+        default: false
+
+      reason:
+        description: "Justificacion de la ejecucion"
+        required: false
+        default: "N/A"
+        type: string
 
 jobs:
   manual:
     runs-on: ubuntu-24.04
     steps:
-      - name: "Say hello manually"
-        run: echo "Hello, world! from a manual trigger"
+      - name: Show info from Inputs
+        env:
+          LOG_LEVEL: ${{ inputs.log_level }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          REASON: ${{ inputs.reason }}
+        run: |
+          echo "Log level: ${LOG_LEVEL}"
+          echo "Environment: ${ENVIRONMENT}"
+          echo "Dry run: ${DRY_RUN}"
+          echo "Reason: ${REASON}"
+      - name: Deploy (solo si no es dry_run)
+        if: ${{ !inputs.dry_run }}
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          echo "Deploying to ${ENVIRONMENT}"
 
-      - name: "show runner date"
-        run: date
-
-      - name: "show available files"
-        run: ls -la
+      - name: solo log en dry_run
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "Dry run: estamos en modo simulación"
