@@ -15,3 +15,11 @@ jobs:
           echo "Event ${{ toJson(github.event) }}"
           echo "Action: ${{ github.event.action }}"
           echo "Issue Number: ${{ github.event.issue.number }}"
+
+      - name: comentar como bot en Github Actions
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: gh issue comment $ISSUE_NUMBER --repo $GITHUB_REPOSITORY --body "¡Hola! Este comentario fue generado automáticamente por un workflow de GitHub Actions."
