@@ -7,8 +7,10 @@ on:
     types: [created]
 
 jobs:
-  inspect:
+  inspect-event:
     runs-on: ubuntu-24.04
+    permissions:
+      issues: write
     steps:
       - name: Show event
         run: |
