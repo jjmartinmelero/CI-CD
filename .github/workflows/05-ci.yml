@@ -9,6 +9,9 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: info-project
     steps:
       - name: checkout code
         uses: actions/checkout@v6
@@ -20,13 +23,27 @@ jobs:
           run_install: false
 
       - name: install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          cd info-project
+          echo "Instalando dependencias de info-project"
+          pnpm install --frozen-lockfile
+          echo "Dependencias instaladas correctamente"
 
       - name: lint
-        run: pnpm lint
+        run: |
+          cd info-project
+          echo "Ejecutando lint"
+          pnpm lint
+          echo "Lint ejecutado correctamente"
 
       - name: Test
-        run: pnpm test
+        run: |
+          cd info-project
+          echo "Ejecutando tests"
+          pnpm test
+          echo "Tests ejecutados correctamente"
 
       - name: Build
-        run: pnpm build
+        run: |
+          cd info-project
+          pnpm build

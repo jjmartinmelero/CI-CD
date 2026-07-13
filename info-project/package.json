@@ -1,0 +1,16 @@
+{
+  "name": "info-project",
+  "version": "1.0.0",
+  "description": "Un proyecto sencillo para mostrar información del repositorio.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "echo 'No linting needed'",
+    "test": "node test.js",
+    "build": "echo 'No build needed'"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0"
+  }
+}
