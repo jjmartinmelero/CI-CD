@@ -19,31 +19,27 @@ jobs:
       - name: preparar npm
         uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
           run_install: false
 
       - name: install dependencies
         run: |
-          cd info-project
           echo "Instalando dependencias de info-project"
           pnpm install --frozen-lockfile
           echo "Dependencias instaladas correctamente"
 
       - name: lint
         run: |
-          cd info-project
           echo "Ejecutando lint"
           pnpm lint
           echo "Lint ejecutado correctamente"
 
       - name: Test
         run: |
-          cd info-project
           echo "Ejecutando tests"
           pnpm test
           echo "Tests ejecutados correctamente"
 
       - name: Build
         run: |
-          cd info-project
           pnpm build
