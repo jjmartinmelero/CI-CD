@@ -43,3 +43,18 @@ jobs:
       - name: Build
         run: |
           pnpm build
+  ci-v2:
+    needs: [ci]
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: info-project
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v6
+
+      - name: setup node and pnpm
+        uses: ./
+        with:
+          node-version: "20"
+          pnpm-version: "7"
