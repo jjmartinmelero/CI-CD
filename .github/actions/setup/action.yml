@@ -1,0 +1,22 @@
+name: "Setup Node.js and pnpm"
+description: "Configura Node.js y pnpm para CI/CD."
+inputs:
+  node-version:
+    description: "Versión de Node.js"
+    required: false
+    default: "20"
+  pnpm-version:
+    description: "Versión de pnpm"
+    required: false
+    default: "7"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - name: Setup pnpm
+      run: npm install -g pnpm@${{ inputs.pnpm-version }}
+      shell: bash
